@@ -1,0 +1,48 @@
+
+{% extends 'staff_base.html' %}
+{% load static %}
+{% block title %}
+{% endblock %}
+{% block background %} {% endblock %}
+{% block body %}
+
+
+<div class="container">
+  <h1>Add Food Menu</h1>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <label for="vehicle_name" class="form-label font-weight-bold text-uppercase">FOOD NAME</label>
+        <input type="text" class="form-control" id="name" name="name" required
+               pattern="[a-zA-Z0-9\s]{2,100}" title="Please enter a valid food name. (2-100 alphanumeric characters)">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <label for="vehicle_type" class="form-label font-weight-bold text-uppercase">FOOD TYPE</label>
+        <select class="form-select" id="ftype" name="ftype" required>
+          <option value="">Select Food Type</option>
+          <option value="3">Meal</option>
+          <option value="2">Soft Drink</option>
+          <option value="4">Cake</option>
+          <option value="5">Snack</option>
+          <option value="1">Chips</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-2">
+        <label for="image" class="form-label font-weight-bold text-uppercase">FOOD IMAGE</label>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <label for="rate" class="form-label font-weight-bold text-uppercase">RATE</label>
+        <input type="number" class="form-control" id="rate" name="rate" required
+               pattern="[0-9]+" title="Please enter a valid rate. (Only digits)">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">ADD FOOD</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,370 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Marian Cafe</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'vehiapp/css/open-iconic-bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/animate.css' %}">
+
+  <link rel="stylesheet" href="{% static 'vehiapp/css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/owl.theme.default.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/magnific-popup.css' %}">
+
+  <link rel="stylesheet" href="{% static 'vehiapp/css/aos.css' %}">
+
+  <link rel="stylesheet" href="{% static 'vehiapp/css/ionicons.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'vehiapp/css/bootstrap-datepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/jquery.timepicker.css' %}">
+
+
+  <link rel="stylesheet" href="{% static 'vehiapp/css/flaticon.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/icomoon.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/style.css' %}">
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/">Marian <span>Cafe</span></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+        aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+      </button>
+
+      {% include 'nav.html' %}
+      <!-- END nav -->
+
+      <div class="hero-wrap ftco-degree-bg"
+        style="background-image: url('https://images.unsplash.com/photo-1540304453527-62f979142a17?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aG90ZWwlMjBmb29kfGVufDB8fDB8fHww');"
+        data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text justify-content-start align-items-center justify-content-center">
+            <div class="col-lg-8 ftco-animate">
+              <div class="text w-100 text-center mb-md-5 pb-md-5">
+                <h1 class="mb-4">Discover Delicious Moments at Your College Cafe - Quick & Effortless Reservations!</h1>
+                <p style="font-size: 18px;">Secure Your Culinary Journey - Prebook Delicious Meals for Your College Cafe! One-time, Subscription, and Special Events Catered Just for You.</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="ftco-section ftco-no-pt bg-light">
+        <div class="container">
+          <div class="row no-gutters">
+            <div class="col-md-12	featured-top">
+              <div class="row no-gutters">
+                <div class="col-md-4 d-flex align-items-center">
+
+                  <form action="{% url 'index' %}" enctype="multipart/form-data"
+                    class="request-form ftco-animate bg-primary" method="POST">
+                    {% csrf_token %}
+                    <h2>User Registration</h2>
+                    <div class="form-group">
+                      <label for="name" class="label">Name</label>
+                      <input type="text" class="form-control" name="name" placeholder="Full Name" name="name"
+                        pattern="[A-Za-z\s]{1,50}" title="Enter Name In Valid Format (firstname+ +lastname)" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="address" class="label">Address</label>
+                      <input type="text" class="form-control" name="address" placeholder="Enter Your Address" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="phone" class="label">Phone</label>
+                      <input type="text" class="form-control" name="phone" placeholder="Phone Number"
+                        pattern="[6-9]{1}[0-9]{9}" required title="Phone number with 7-9 and remaing 9 digit with 0-9">
+                    </div>
+                    <div class="d-flex">
+                      <div class="form-group mr-2">
+                        <label for="name" class="label">Department</label>
+                      <input type="text" class="form-control" name="department" placeholder="Department Name" name="department"
+                        pattern="[A-Za-z\s]{1,50}" title="" required>
+                      </div>
+                      <div class="form-group ml-2">
+                        <label for="id_card" class="label">ID Card No:</label>
+                        <input type="text" class="form-control" name="id_card" placeholder="Enter Id Card Number"
+                          required>
+                      </div>
+                    </div>
+                    <div class="d-flex">
+                      <div class="form-group mr-2">
+                        <label for="email" class="label">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="Enter Email" minlength="8"
+                          title="Enter Atleat 8 Characters" required>
+                      </div>
+                      <div class="form-group ml-2">
+                        <label for="password" class="label">Password</label>
+                        <input type="password" class="form-control" name="password" placeholder="Enter Password"
+                          required>
+                      </div>
+                    </div>
+
+                    <div class="d-flex">
+                      <div class="form-group ml-2">
+                        <label for="image" class="label">Photo</label>
+                        <input type="file" class="form-control" name="image" accept=".jpg" required>
+                      </div>
+                      <div class="form-group ml-2">
+                        <label for="image" class="label">Id Card</label>
+                        <input type="file" class="form-control" name="id_card" accept=".jpg" required>
+                      </div>
+                    </div>
+                    <script>
+                      document.querySelector('input[name="image"]').addEventListener('change', function (e) {
+                        var file = e.target.files[0];
+                        var fileName = file.name;
+                        var fileType = fileName.split('.').pop().toLowerCase();
+
+                        if (fileType !== 'jpg') {
+                          alert('Please select a JPG file.');
+                          e.target.value = ''; // Clear the input field
+                        }
+                      });
+                    </script>
+                    <font color="red">{{msg}}</font>
+                    <div class="form-group">
+                      <input type="submit" value="Register" class="btn btn-secondary py-3 px-4">
+                    </div>
+                  </form>
+                </div>
+                <div class="col-md-8 d-flex align-items-center">
+                  <div class="services-wrap rounded-right w-100">
+                    <h3 class="heading-section mb-4">Effortlessly Reserve Your Favorites at the Marian Cafe!</h3>
+                    <div class="row d-flex mb-4">
+                      <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                        <div class="services w-100 text-center">
+                          <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="flaticon-food-plate"></span></div>
+                          <div class="text w-100">
+                            <h3 class="heading mb-2">Choose Your Taste </h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                        <div class="services w-100 text-center">
+                          <div class="icon d-flex align-items-center justify-content-center"><span
+                              class="flaticon-handshake"></span></div>
+                          <div class="text w-100">
+                            <h3 class="heading mb-2">Select the Best Combo</h3>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <p><a href=/vehicles class="btn btn-primary py-3 px-4">Pick Your Taste</a></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </section>
+
+
+      <section class="ftco-section ftco-no-pt bg-light">
+
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+              <span class="subheading">What we offer</span>
+              <h2 class="mb-2">Food Menu</h2>
+            </div>
+          </div>
+          <div class="row">
+            {% for food in a %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <div class="car-wrap rounded ftco-animate">
+                <div class="img rounded d-flex align-items-end"
+                  style="background-image: url('{{ food.image.url }}');">
+                </div>
+                <div class="text">
+                  <h2 class="mb-0"><a href="#">{{ food.name }}</a></h2>
+                  <div class="d-flex mb-3">
+                    <!-- <span class="cat">{{ vehicle.vehicle_reg }}</span> -->
+                    <p class="price ml-auto">₹{{ food.rate }} </p>
+                  </div>
+                  <p class="d-flex mb-0 d-block">
+                    <a href="#" class="btn btn-primary py-2 mr-1">Book now</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+
+      </section>
+
+      <section class="ftco-section ftco-about">
+        <div class="container">
+          <div class="row no-gutters">
+            <div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center"
+              style="background-image: url('https://images.unsplash.com/photo-1609590981063-d495e2914ce4?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FmZSUyMGZvb2R8ZW58MHx8MHx8fDA%3D');">
+            </div>
+            <div class="col-md-6 wrap-about ftco-animate">
+              <div class="heading-section heading-section-white pl-md-5">
+                <span class="subheading">About us</span>
+                <h2 class="mb-4">Welcome to MARIAN CAFE</h2>
+
+                <p>Welcome to Cafe Marian, where every sip is a journey and every flavor tells a story. Discover a delightful experience as we serve you the perfect blend of passion and taste. With a cozy ambiance and warm hospitality, Cafe Marian invites you to savor not just coffee but moments of connection and relaxation. From artisanal brews to delectable pastries, our menu is crafted with love, ensuring each visit is a treat for your senses. At Cafe Marian, we believe in creating more than just a cafe; we create a haven for those who appreciate the art of good coffee and the joy of shared moments.
+                </p>
+                <p></p>
+                <p><a href="/vehicles" class="btn btn-primary py-3 px-4">Find Your Taste</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="ftco-counter ftco-section img bg-light" id="section-counter">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+              <div class="block-18">
+                <div class="text text-border d-flex align-items-center">
+                  <strong class="number" data-number="25">0</strong>
+                  <span>Year <br>Experienced</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+              <div class="block-18">
+                <div class="text text-border d-flex align-items-center">
+                  <strong class="number" data-number="3">0</strong>
+                  <span>Total <br>Marian Cafe</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+              <div class="block-18">
+                <div class="text text-border d-flex align-items-center">
+                  <strong class="number" data-number="30000">0</strong>
+                  <span>Happy <br>Customers</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+              <div class="block-18">
+                <div class="text d-flex align-items-center">
+                  <strong class="number" data-number="3">0</strong>
+                  <span>Total <br>Branches</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="ftco-footer ftco-bg-dark ftco-section">
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2"><a href="#" class="logo">Marian <span>Cafe</span></a></h2>
+                <p>It is greatfull hardwork there is a person behind it .</p>
+                <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                  <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4 ml-md-5">
+                <h2 class="ftco-heading-2">Information</h2>
+                <ul class="list-unstyled">
+                  <li><a href="#" class="py-2 d-block">About</a></li>
+                  <li><a href="#" class="py-2 d-block">Services</a></li>
+                  <li><a href="#" class="py-2 d-block">Term and Conditions</a></li>
+                  <li><a href="#" class="py-2 d-block">Best Price Guarantee</a></li>
+                  <li><a href="#" class="py-2 d-block">Privacy &amp; Cookies Policy</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Customer Support</h2>
+                <ul class="list-unstyled">
+                  <li><a href="#" class="py-2 d-block">FAQ</a></li>
+                  <li><a href="#" class="py-2 d-block">Payment Option</a></li>
+                  <li><a href="#" class="py-2 d-block">Booking Tips</a></li>
+                  <li><a href="#" class="py-2 d-block">How it works</a></li>
+                  <li><a href="" class="py-2 d-block">Contact Us</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Have a Questions?</h2>
+                <div class="block-23 mb-3">
+                  <ul>
+                    <li><span class="icon icon-map-marker"></span><span class="text">BR Tech.in,kerala,India</span></li>
+                    <li><a href="#"><span class="icon icon-phone"></span><span class="text">+918086849529</span></a>
+                    </li>
+                    <li><a href="#"><span class="icon icon-envelope"></span><span
+                          class="text">brtechin@gmail.com</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+
+              <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;
+                <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made
+                with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                  target="_blank">Colorlib</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+
+
+      <!-- loader -->
+      <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+          <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+          <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+            stroke="#F96D00" />
+        </svg></div>
+
+
+      <script src="{% static 'vehiapp/js/jquery.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/jquery-migrate-3.0.1.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/popper.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/jquery.easing.1.3.js' %}"></script>
+      <script src="{% static 'vehiapp/js/jquery.waypoints.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/jquery.stellar.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/owl.carousel.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/jquery.magnific-popup.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/aos.js' %}"></script>
+      <script src="{% static 'vehiapp/js/jquery.animateNumber.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/bootstrap-datepicker.js' %}"></script>
+      <script src="{% static 'vehiapp/js/jquery.timepicker.min.js' %}"></script>
+      <script src="{% static 'vehiapp/js/scrollax.min.js' %}"></script>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+      <script src="{% static 'vehiapp/js/google-map.js' %}"></script>
+      <script src="{% static 'vehiapp/js/main.js' %}"></script>
+
+</body>
+
+</html>

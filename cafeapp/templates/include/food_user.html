@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Marian Cafe</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'vehiapp/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vehiapp/css/animate.css' %}">
+
+    <link rel="stylesheet" href="{% static 'vehiapp/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vehiapp/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vehiapp/css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'vehiapp/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'vehiapp/css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'vehiapp/css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'vehiapp/css/jquery.timepicker.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'vehiapp/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'vehiapp/css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'vehiapp/css/style.css' %}">
+  </head>
+  <body>
+  <div class="me-md-3 me-xl-5">
+                    <h2>Welcome back, {% for i in user %}<p>{{i.email}}<p>{% endfor %}</h2>
+                  </div>
+    <!-- END nav -->
+
+
+    	<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+      <h2 class="mb-2">Featured Menu</h2>
+    </div>
+  </div>
+  <div class="row">
+ {% for food in food %}
+    <div class="col-lg-4 col-md-6 col-sm-12">
+        <div class="car-wrap rounded ftco-animate">
+            <div class="img rounded d-flex align-items-end" style="background-image: url('{{ food.image.url }}');">
+            </div>
+            <div class="text">
+                <h2 class="mb-0"><a href="#">{{ food.name }}</a></h2>
+                <div class="d-flex mb-3">
+                    <span class="cat">{{ food.ftype }}</span>
+                    <p class="price ml-auto">₹{{ food.rate }}</p>
+                </div>
+                <p class="d-flex mb-0 d-block">
+                    <a href="/book_vehicle/{{vehicle.id}}/" class="btn btn-primary py-2 mr-1">Book now</a>
+                    <!-- <a href="/detail/{{vehicle.id}}/" class="btn btn-secondary py-2 ml-1">Details</a> -->
+                </p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+  </div>
+</div>
+
+
+
+
+
+
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{% static 'vehiapp/js/jquery.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/popper.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'vehiapp/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/aos.js' %}"></script>
+  <script src="{% static 'vehiapp/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'vehiapp/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'vehiapp/js/scrollax.min.js' %}"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="{% static 'vehiapp/js/google-map.js' %}"></script>
+  <script src="{% static 'vehiapp/js/main.js' %}"></script>
+
+  </body>
+</html>

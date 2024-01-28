@@ -1,0 +1,58 @@
+{% extends 'userbase.html' %}
+{% load static %}
+{% block title %}
+{% endblock %}
+{% block background %} {% endblock %}
+{% block body %}
+<div class="container">
+  <h1>Book Vehicle</h1>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ vehicle.name }}</h5>
+          <p class="card-text">{{ vehicle.description }}</p>
+          <p class="card-text">Fare: {{ vehicle.fare }}</p>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="pickup_location">Pickup Location</label>
+              <input type="text" class="form-control" id="pickup_location" name="pickup_location" required>
+            </div>
+            <div class="form-group">
+              <label for="dropoff_location">Dropoff Location</label>
+              <input type="text" class="form-control" id="dropoff_location" name="dropoff_location" required>
+            </div>
+            <div class="form-group">
+              <label for="distance">Distance(Km)</label>
+              <input type="number" class="form-control" id="distance" name="distance" required>
+            </div>
+            
+            <script>
+              var distanceInput = document.getElementById('distance');
+              distanceInput.addEventListener('input', function() {
+                var value = parseFloat(distanceInput.value);
+                if (value <= 5) {
+                  distanceInput.setCustomValidity('Please enter a distance greater than 4km.');
+                } else {
+                  distanceInput.setCustomValidity('');
+                }
+              });
+            </script>
+            
+            <div class="form-group">
+              <label for="booking_date"> Date</label>
+              <input type="date" class="form-control" name="date" required>
+            </div>
+            <div class="form-group">
+              <label for="booking_date">Time</label>
+              <input type="time" class="form-control" name="time" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Book Now</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+{% include 'include/head.html' %}
+</head>
+<style>
+  .navbar-brand span {
+    color: #01d28e;
+}
+</style>
+<body {% block background %}{% endblock %}>
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="navbar-brand-wrapper d-flex justify-content-center">
+        <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
+          <a class="navbar-brand" href="#">MARIAN <span>CAFE</span></a>
+          <a class="navbar-brand brand-logo-mini" href="#"><img src="{% static 'dashboard/images/logo-mini.svg' %}" alt="logo"/></a>
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-sort-variant"></span>
+          </button>
+        </div>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <ul class="navbar-nav mr-lg-4 w-100">
+          <li class="nav-item nav-search d-none d-lg-block w-100">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="search" >
+                  <i class="mdi mdi-magnify"></i>
+                </span>
+              </div>
+              <form method="get" action="{% url 'search_food' %}">
+              <input type="text" class="form-control" placeholder="Search now" aria-label="search" aria-describedby="search"name="name">
+              </form>
+              
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown me-1">
+            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-bs-toggle="dropdown">
+              <i class="mdi mdi-filter-outline"></i>
+              <span class="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+              <h6 class="p-3 mb-0">Filter options</h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item preview-item" href="/filter/1/">Chips</a>
+              <a class="dropdown-item preview-item" href="/filter/2/">Soft Drink</a>
+              <a class="dropdown-item preview-item" href="/filter/3/">Meal</a>
+              <a class="dropdown-item preview-item" href="/filter/4/">Cake</a>
+              <a class="dropdown-item preview-item" href="/filter/5/">Snack</a>
+            </div>
+            
+          <li class="nav-item dropdown me-4">
+            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+              <i class="mdi mdi-bell mx-0"></i>
+              <span class="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-success">
+                    <i class="mdi mdi-information mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">Application Error</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Just now
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-warning">
+                    <i class="mdi mdi-settings mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">Settings</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Private message
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-info">
+                    <i class="mdi mdi-account-box mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">New user registration</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    2 days ago
+                  </p>
+                </div>
+              </a>
+            </div>
+          </li>{% for i in user %}
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+              <img src="{{i.image.url}}" alt="profile"/>
+              <span class="nav-profile-name">{{i.name}}</span>
+            </a>{% endfor %}
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item"  href="/changep-user">
+                <i class="mdi mdi-settings text-primary"></i>
+                Change Password
+              </a>
+              <a class="dropdown-item" href="/logout">
+                <i class="mdi mdi-logout text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/user_home">
+              <i class="mdi mdi-home menu-icon"></i>
+              <span class="menu-title">User Dashboard</span>
+            </a>
+          </li>
+
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="/drivers">
+              <i class="mdi mdi-view-headline menu-icon"></i>
+              <span class="menu-title">Drivers</span>
+            </a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="/edit-user">
+              <i class="mdi mdi-chart-pie menu-icon"></i>
+              <span class="menu-title">Edit Profile</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/mybookings">
+              <i class="mdi mdi-grid-large menu-icon"></i>
+              <span class="menu-title">My Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">
+              <i class="mdi mdi-emoticon menu-icon"></i>
+              <span class="menu-title">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+
+
+
+
+
+
+
+</body>
+
+</html>
+{% block body %}{% endblock %}
