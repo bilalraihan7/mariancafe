@@ -41,6 +41,7 @@ class foodmenu(models.Model):
     image = models.ImageField(upload_to="vehicles/", blank=True)
     rate=models.IntegerField(null=True)
     status=models.CharField(max_length=20,default="not booked")
+    quantity=models.IntegerField(default=10)
     
     
     def __str__(self):
@@ -49,16 +50,25 @@ class foodmenu(models.Model):
 class booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    food=models.ForeignKey(foodmenu, on_delete=models.CASCADE,null=True,blank=True)
-    time=models.TimeField(auto_now=True)
-    date=models.DateField(auto_now=True)
+    time = models.TimeField(auto_now=True)
+    date = models.DateField(auto_now=True)
 
-    
+class BookingItem(models.Model):
+    booking = models.ForeignKey(booking, on_delete=models.CASCADE)
+    item = models.ForeignKey(foodmenu, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
 class Payment(models.Model):
-    bookid=models.ForeignKey(booking,on_delete=models.CASCADE)
-    cname=models.CharField(max_length=25)
-    amount=models.IntegerField()
-    cardno=models.IntegerField()
-    cvv=models.IntegerField()
+    booking = models.ForeignKey(booking, on_delete=models.CASCADE)
+    cname = models.CharField(max_length=25)
+    amount = models.IntegerField()
+    cardno = models.IntegerField()
+    cvv = models.IntegerField()
 
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(foodmenu, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
 
+    def total_price(self):
+        return self.item.rate * self.quantity
