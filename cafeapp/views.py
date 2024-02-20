@@ -135,7 +135,9 @@ def user_home(request):
     id=request.session['id']
     user=User.objects.filter(id=id)
     food=foodmenu.objects.all()
-    all_data={'user':user,'food':food}
+    cart=Cart.objects.filter(user=id)
+    noofitems=cart.count()
+    all_data={'user':user,'food':food, 'cart':cart,'noofitems':noofitems}
     return render(request,'cafeapp/user_home.html', all_data )
 
 def logout_view(request):
@@ -385,7 +387,7 @@ def changepassword_user(request):
         return render(request, 'cafeapp/change_password_user.html',all)
     
 
-def editdriver(request):
+def editstaff(request):
     if request.method == 'POST':
         id = request.session['id']
         user = Staff.objects.filter(id=id)
@@ -422,7 +424,7 @@ def editdriver(request):
         }
         return render(request, 'cafeapp/editprofile-driver.html', all_data)
 
-def changepassword_driver(request):
+def changepassword_staff(request):
     id = request.session['id']
     print(id)
     user = Staff.objects.filter(id=id)
@@ -466,12 +468,23 @@ def changepassword_driver(request):
     else:
         return render(request, 'cafeapp/change_password_driver.html',all)
     
-def view_driver_vehicles(request,did):
-    id = request.session['id']
-    print(id)
-    user = User.objects.filter(id=id)
-    vehicl=vehicle.objects.filter(userid=did)
-    driver=Driver.objects.filter(id=did)
-    all_data={'user':user,'vehicle':vehicl,'driver':driver}
-    return render (request,"cafeapp/user_view_driver_vehicles.html",all_data)
+
     
+def addToCart(request, food_id):
+    user_id = request.session.get('id')
+    user = get_object_or_404(User, id=user_id)
+    food = get_object_or_404(foodmenu, id=food_id)
+    if Cart.objects.filter(user=user, items=food).exists():
+        messages.error(request, 'Item already in cart!')
+    else:
+        cart = Cart.objects.create(user=user, items=food)
+        cart.save()
+    return redirect('/user_home')
+
+def removeFromCart(request, food_id):
+    user_id = request.session.get('id')
+    user = get_object_or_404(User, id=user_id)
+    food = get_object_or_404(foodmenu, id=food_id)
+    cart = Cart.objects.get(user=user, items=food)
+    cart.delete()
+    return redirect('/user_home')

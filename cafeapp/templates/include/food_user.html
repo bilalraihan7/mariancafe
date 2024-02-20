@@ -27,11 +27,39 @@
     <link rel="stylesheet" href="{% static 'vehiapp/css/icomoon.css' %}">
     <link rel="stylesheet" href="{% static 'vehiapp/css/style.css' %}">
   </head>
+  <style>
+    /* CSS for low-stock */
+.card.low-stock {
+    background-color: #f8d7da; /* light red background */
+    border-color: #f5c6cb; /* red border */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+/* CSS for in-stock */
+.card.in-stock {
+    background-color: #d4edda; /* light green background */
+    border-color: #c3e6cb; /* green border */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+  </style>
   <body>
   <div class="me-md-3 me-xl-5">
                     <h2>Welcome back, {% for i in user %}<p>{{i.email}}<p>{% endfor %}</h2>
                   </div>
     <!-- END nav -->
+<!-- This div will contain the alert message -->
+<div class="alert-message" style="display: none;">
+  {% for message in messages %}
+      {{ message }}
+  {% endfor %}
+</div>
 
 
     	<div class="container">
@@ -41,27 +69,51 @@
     </div>
   </div>
   <div class="row">
- {% for food in food %}
+    {% for food in food %}
     <div class="col-lg-4 col-md-6 col-sm-12">
         <div class="car-wrap rounded ftco-animate">
             <div class="img rounded d-flex align-items-end" style="background-image: url('{{ food.image.url }}');">
             </div>
             <div class="text">
                 <h2 class="mb-0"><a href="#">{{ food.name }}</a></h2>
+                <div class="quantity">
+                    {% if food.quantity < 10 %}
+                        <div class="card low-stock">
+                            <p>Low Stock: <span style="color: red;">{{ food.quantity }}</span></p>
+                        </div>
+                    {% else %}
+                        <div class="card in-stock">
+                            <p>Item is in stock</p>
+                        </div>
+                    {% endif %}
+                </div>
                 <div class="d-flex mb-3">
-                    <span class="cat">{{ food.ftype }}</span>
+                    <span class="cat" style="color: rgba(15, 114, 235, 0.671);">
+                        {% if food.ftype == "3" %}
+                        Meal
+                        {% elif food.ftype == "2" %}
+                        Soft Drink
+                        {% elif food.ftype == "4" %}
+                        Cake
+                        {% elif food.ftype == "5" %}
+                        Snack
+                        {% elif food.ftype == "1" %}
+                        Chips
+                        {% endif %}
+                    </span>
                     <p class="price ml-auto">₹{{ food.rate }}</p>
                 </div>
                 <p class="d-flex mb-0 d-block">
-                    <a href="/book_vehicle/{{vehicle.id}}/" class="btn btn-primary py-2 mr-1">Book now</a>
-                    <!-- <a href="/detail/{{vehicle.id}}/" class="btn btn-secondary py-2 ml-1">Details</a> -->
+                    <a href="" class="btn btn-primary py-2 mr-1">Book now</a>
+                    <a href="/addToCart/{{food.id}}/" class="btn btn-secondary py-2 ml-1">Add To Cart</a>
                 </p>
             </div>
         </div>
     </div>
-{% endfor %}
+    {% endfor %}
+</div>
 
-  </div>
+
 </div>
 
 
@@ -72,6 +124,15 @@
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+<!-- Include this JavaScript snippet in your template -->
+<script>
+  // Check if the alert message exists in the page
+  const alertMessage = document.querySelector('.alert-message');
+  // If it exists and the text content is not empty, display it in an alert box
+  if (alertMessage && alertMessage.textContent.trim() !== '') {
+      alert(alertMessage.textContent.trim());
+  }
+</script>
 
 
   <script src="{% static 'vehiapp/js/jquery.min.js' %}"></script>
