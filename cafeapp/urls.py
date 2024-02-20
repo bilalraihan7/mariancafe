@@ -25,9 +25,11 @@ urlpatterns = [
     path('make_payment/<int:booking_id>/', views.make_payment, name='make_payment'),
     path('edit-user',views.edituser),
     path('changep-user',views.changepassword_user),
-    path('edit-driver',views.editdriver),
-    path('changep-driver',views.changepassword_driver),
-    path('uview_drivervehicle/<int:did>/',views.view_driver_vehicles)
+    path('edit-staff',views.editstaff),
+    path('changep-staff',views.changepassword_staff),
+    path('addToCart/<int:food_id>/',views.addToCart),
+    path('removeFromCart/<int:food_id>/',views.removeFromCart),
+    
 ]
     
 

@@ -41,6 +41,7 @@ class foodmenu(models.Model):
     image = models.ImageField(upload_to="vehicles/", blank=True)
     rate=models.IntegerField(null=True)
     status=models.CharField(max_length=20,default="not booked")
+    quantity=models.IntegerField(default=10)
     
     
     def __str__(self):
@@ -60,5 +61,11 @@ class Payment(models.Model):
     amount=models.IntegerField()
     cardno=models.IntegerField()
     cvv=models.IntegerField()
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ForeignKey(foodmenu,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.items.name
 
 
