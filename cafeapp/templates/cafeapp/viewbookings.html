@@ -16,6 +16,7 @@ Bookings
                 <th>Booked Items</th>
                 <th>Item Photos</th>
                 <th>Checkout Time</th>
+                <th>Total Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@ Bookings
                     {% endfor %}
                 </td>
                 <td>{{ booking.checkout_date|date:"D, d M Y H:i" }}</td>
+                <td>{{ booking.total_amount }}</td>
             </tr>
             {% endfor %}
         </tbody>
