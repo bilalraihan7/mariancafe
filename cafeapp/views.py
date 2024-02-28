@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.db.models import Count
 from django.contrib.auth import logout
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 def index(request):
     if request.method == 'POST':
@@ -162,9 +163,10 @@ def add_food(request):
         image = request.FILES['image']
         rate = request.POST['rate']
         user = request.session['id']
+        quantity= request.POST['quantity']
         staff=Staff.objects.get(id=int(user))
         print(staff)
-        new_food = foodmenu(userid=staff, name=name, ftype=ftype, image=image, rate=rate)
+        new_food = foodmenu(userid=staff, name=name, ftype=ftype, image=image, rate=rate,quantity=quantity)
         new_food.save()
         
         messages.success(request, 'Food added successfully!')
@@ -172,6 +174,31 @@ def add_food(request):
     id=request.session['id']
     user=Staff.objects.filter(id=id)
     return render(request, 'cafeapp/add_food.html',{'user':user})
+
+def update_foodDetails(request,foodid):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        ftype = request.POST.get('ftype')
+        image = request.FILES.get('image')
+        rate = request.POST.get('rate')
+        quantity = request.POST.get('quantity')
+        food = foodmenu.objects.get(id=foodid)
+        food.name = name
+        food.ftype = ftype
+        food.rate = rate
+        food.quantity = quantity
+        if image:
+            food.image = image
+        food.save()
+        return redirect('/staff_home')
+    else:
+        food = foodmenu.objects.get(id=foodid)
+        id=request.session['id']
+        user=Staff.objects.filter(id=id)
+        all_data={'user':user,'food':food}
+        return render(request, 'cafeapp/update_food.html', all_data)
+    
+    
 
 def delete_food(request,id):
     a=foodmenu.objects.get(id=id)
@@ -196,61 +223,7 @@ def search_food(request):
 
 
 
-def book_vehicle(request, vehicle_id):
-    vehicles = vehicle.objects.get(id=vehicle_id)
-    driver = vehicles.userid
-    user_id = request.session['id']
-    
-    if request.method == 'POST':
-        pickup_location = request.POST['pickup_location']
-        dropoff_location = request.POST['dropoff_location']
-        time = request.POST['time']
-        date = request.POST['date']
-        distance = request.POST['distance']
-        user = User.objects.get(id=user_id)
-        
-        new_booking = booking.objects.create(
-            user=user,
-            driver=driver,
-            vehicle=vehicles,
-            pickup_location=pickup_location,
-            dropoff_location=dropoff_location,
-            time=time,
-            date=date,
-            distance=distance
-        )
-        
-        vehicles.status = 'booked'
-        vehicles.save()
-        new_booking.save()
-        
-        messages.success(request, 'Your booking is confirmed!')
-        
-        # Redirect to payment page with booking ID
-        return redirect(reverse('make_payment', args=[new_booking.id]))
-    
-    id = request.session['id']
-    user = User.objects.filter(id=id)
-    context = {'vehicle': vehicle, 'user': user}
 
-    return render(request, 'cafeapp/book_vehicle.html', context)
-
-
-def view_booking(request):
-    id=request.session['id']
-    bookings=booking.objects.filter(driver=id)
-    user=Driver.objects.filter(id=id)
-    all_data={'user':user,'bookings':bookings}
-    return render(request,'cafeapp/viewbookings.html',all_data)
-
-
-
-def view_drivers(request):
-    id = request.session['id']
-    user = User.objects.filter(id=id)
-    drivers = Driver.objects.all()
-    all_data = {'user': user, 'drivers': drivers}
-    return render(request, 'cafeapp/drivers.html', all_data)
 
 def my_booking(request):
     id=request.session['id']
@@ -260,51 +233,7 @@ def my_booking(request):
     return render(request,'cafeapp/mybookings.html',all_data)
 
 
-def view_stats(request):
-    countuser=User.objects.count()
-    countdrivers=Driver.objects.count()
-    countbookings=booking.objects.count()
-    cvehicles=vehicle.objects.count()
-    bookings = booking.objects.values('vehicle').annotate(total_bookings=Count('vehicle'))
-    sorted_bookings = sorted(bookings, key=lambda x: x['total_bookings'], reverse=True)
-    most_booked_id = sorted_bookings[0]['vehicle'] if sorted_bookings else None
-    most_vehicle=vehicle.objects.filter(id=most_booked_id)
 
-
-    all={
-        'user':countuser,
-        'driver':countdrivers,
-        'bookings':countbookings,
-        'vehicles':cvehicles,
-        'most':most_vehicle
-    }
-    return render(request,'cafeapp/stats.html',all)
-
-
-def make_payment(request, booking_id):
-    if request.method == 'POST':
- 
-        book = get_object_or_404(booking, id=booking_id)
-        payment_amount = book.distance * book.vehicle.rate if book.distance and book.vehicle else 0
-        payment = Payment.objects.create(
-            bookid=book,
-            cname=request.POST.get('cname'),
-            amount=payment_amount,
-            cardno=request.POST.get('cardno'),
-            cvv=request.POST.get('cvv')
-        )
-
-        book.payment = payment
-        book.save()
-        id=request.session['id']
-        user = User.objects.filter(id=id)
-        return render(request,'cafeapp/success.html',{'user':user})
-    else:
-        id = request.session['id']
-        user = User.objects.filter(id=id)
-        book = get_object_or_404(booking, id=booking_id)
-        payment_amount = book.distance * book.vehicle.rate if book.distance and book.vehicle else 0
-        return render(request, 'cafeapp/payment.html', {'user': user, 'payment_amount': payment_amount})
 
 def edituser(request):
     if request.method == 'POST':
@@ -535,7 +464,7 @@ def confirm_checkout(request):
         messages.success(request, 'Checkout successful!')
     except Exception as e:
         messages.error(request, f'Error occurred during checkout: {str(e)}')
-    return redirect('/user_home')
+    return redirect('/mybookings')
 
 
 from django.http import JsonResponse
@@ -567,9 +496,39 @@ def decreaseQuantity(request, food_id):
         cart.delete()
     return redirect('/user_home')
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render, get_object_or_404
+from .models import User, Checkout  # Ensure to import your models
 
 def myBookings(request):
     user_id = request.session.get('id')
-    user = get_object_or_404(User, id=user_id)
-    bookings = Checkout.objects.filter(user=user)
-    return render(request, 'my_bookings.html', {'bookings': bookings})
+    useri = get_object_or_404(User, id=user_id)  # This gets the user object
+    bookings = Checkout.objects.filter(user=useri).order_by('-checkout_date')  # Filter bookings for this user
+    user=User.objects.filter(id=user_id)
+    page_number = request.GET.get('page', 1)  # Get the page number from the request
+    paginator = Paginator(bookings, 4)  # Show 5 bookings per page
+
+    try:
+        bookings_page = paginator.page(page_number)
+    except PageNotAnInteger:
+        bookings_page = paginator.page(1)
+    except EmptyPage:
+        bookings_page = paginator.page(paginator.num_pages)
+
+    # Now, pass the paginated page object under the key 'bookings'
+    return render(request, 'cafeapp/mybookings.html', {'bookings': bookings_page, 'user': user})
+
+
+def viewBookingsStaff(request):
+    staff_id = request.session.get('id')
+    user = Staff.objects.filter(id=staff_id)
+    bookings_list = Checkout.objects.all().order_by('-checkout_date')
+
+    # Set up pagination
+    paginator = Paginator(bookings_list, 5)  # Show 5 bookings per page
+    page_number = request.GET.get('page')
+    bookings = paginator.get_page(page_number)
+
+    return render(request, 'cafeapp/viewbookings.html', {'bookings': bookings, 'user': user})

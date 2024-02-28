@@ -16,13 +16,8 @@ urlpatterns = [
     path('add_menu',views.add_food),
     path('delete_food/<int:id>/',views.delete_food),
     path('filter/<int:fid>/',views.filter),
-    path('drivers',views.view_drivers),
     path('search_food',views.search_food,name='search_food'),
-    path('book_vehicle/<int:vehicle_id>/',views.book_vehicle),
-    path('viewbookings',views.view_booking),
-    path('mybookings',views.my_booking),
-    path('stats',views.view_stats),
-    path('make_payment/<int:booking_id>/', views.make_payment, name='make_payment'),
+    path('mybookings',views.myBookings),
     path('edit-user',views.edituser),
     path('changep-user',views.changepassword_user),
     path('edit-staff',views.editstaff),
@@ -34,6 +29,8 @@ urlpatterns = [
     path('confirm_checkout/', views.confirm_checkout, name='confirm_checkout'),
     path('increase_quantity/<int:food_id>/',views.increaseQuantity, name='increase_quantity'),
     path('decrease_quantity/<int:food_id>/',views.decreaseQuantity, name='decrease_quantity'),
+    path('edit_food/<int:foodid>/',views.update_foodDetails,name='edit_food'),
+    path('viewbookings',views.viewBookingsStaff),
 ]
     
 

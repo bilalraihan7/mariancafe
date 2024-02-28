@@ -1,0 +1,61 @@
+{% extends 'staff_base.html' %}
+{% load static %}
+{% block title %}
+{% endblock %}
+{% block background %} {% endblock %}
+{% block body %}
+
+<div class="container">
+  <h1>Edit Food Menu</h1>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="name" class="form-label font-weight-bold text-uppercase">FOOD NAME</label>
+        <input type="text" class="form-control" id="name" name="name" required
+               pattern="[a-zA-Z0-9\s]{2,100}" title="Please enter a valid food name. (2-100 alphanumeric characters)"
+               value="{{ food.name }}">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="ftype" class="form-label font-weight-bold text-uppercase">FOOD TYPE</label>
+        <select class="form-select" id="ftype" name="ftype" required>
+          <option value="">Select Food Type</option>
+          <option value="3" {% if food.ftype == '3' %} selected {% endif %}>Meal</option>
+          <option value="2" {% if food.ftype == '2' %} selected {% endif %}>Soft Drink</option>
+          <option value="4" {% if food.ftype == '4' %} selected {% endif %}>Cake</option>
+          <option value="5" {% if food.ftype == '5' %} selected {% endif %}>Snack</option>
+          <option value="1" {% if food.ftype == '1' %} selected {% endif %}>Chips</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="new_image" class="form-label font-weight-bold text-uppercase">CURRENT FOOD IMAGE</label><br>
+        <img src="{{ food.image.url }}" alt="Current Image" class="mb-3" style="max-width: 150px; max-height: 150px;"><br>
+        <label for="new_image" class="form-label font-weight-bold text-uppercase">UPLOAD NEW IMAGE</label>
+        <input type="file" class="form-control" id="new_image" name="image" accept="image/*">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="rate" class="form-label font-weight-bold text-uppercase">RATE</label>
+        <input type="number" class="form-control" id="rate" name="rate" required
+               pattern="[0-9]+" title="Please enter a valid rate. (Only digits)"
+               value="{{ food.rate }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="quantity" class="form-label font-weight-bold text-uppercase">QUANTITY</label>
+        <input type="text" class="form-control" id="quantity" name="quantity" required
+               pattern="[0-9]+" title="Please enter a valid quantity. (Only digits)"
+               value="{{ food.quantity }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">UPDATE FOOD</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

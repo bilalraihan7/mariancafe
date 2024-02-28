@@ -11,6 +11,7 @@ admin.site.register(booking)
 admin.site.register(foodmenu)
 admin.site.register(Cart)
 admin.site.register(Payment)
+admin.site.register(Checkout)
 class StaffAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'status', 'is_verified', 'view_license_button')
     list_filter = ('status', 'is_verified')

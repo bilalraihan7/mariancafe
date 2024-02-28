@@ -98,7 +98,7 @@
             {% empty %}
             <p style="font-size: 14px; color: #666; text-align: center;">Your cart is empty</p>
             {% endfor %}
-            <a href="{% url 'checkout' %}" class="dropdown-item"
+            <a href="/checkout/" class="dropdown-item"
               style="font-size: 14px; text-align: center; padding: 8px; border-radius: 4px; margin-top: 15px; background-color: #0000ff7a; color: white;"
               onclick="checkTotalAmount(event)">
               <center> Checkout {% if total_amount %} - Total Amount: {{ total_amount }} Rs {% endif %}</center>

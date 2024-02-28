@@ -56,12 +56,11 @@
             <div class="text">
                 <h2 class="mb-0"><a href="#">{{ food.name }}</a></h2>
                 <div class="d-flex mb-3">
-                    <span class="cat">{{ food.ftype }}</span>
                     <p class="price ml-auto">₹{{ food.rate }} </p>
                 </div>
                 <p class="d-flex mb-0 d-block">
-                    <a href="#" class="btn btn-primary py-2 mr-1">Bookings</a>
-                    <a href="#" class="btn btn-secondary py-2 ml-1">Edit</a>
+                    <!-- <a href="#" class="btn btn-primary py-2 mr-1">Bookings</a> -->
+                    <a href="/edit_food/{{food.id}}/" class="btn btn-secondary py-2 ml-1">Edit</a>
                     <a href="/delete_food/{{food.id}}/"  class="btn btn-third py-2 ml-1" onclick="return confirm('Are you sure to Delete ?')">Delete</a>
                 </p>
             </div>
