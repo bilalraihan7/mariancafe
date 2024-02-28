@@ -136,8 +136,9 @@ def user_home(request):
     user=User.objects.filter(id=id)
     food=foodmenu.objects.all()
     cart=Cart.objects.filter(user=id)
+    total_amount = sum(item.items.rate * item.quantity for item in cart)
     noofitems=cart.count()
-    all_data={'user':user,'food':food, 'cart':cart,'noofitems':noofitems}
+    all_data={'user':user,'food':food, 'cart':cart,'noofitems':noofitems,'total_amount':total_amount}
     return render(request,'cafeapp/user_home.html', all_data )
 
 def logout_view(request):
@@ -179,7 +180,7 @@ def delete_food(request,id):
 
 def filter(request,fid):
     id=request.session['id']
-    user=Staff.objects.filter(id=id)
+    user=User.objects.filter(id=id)
     food=foodmenu.objects.filter(ftype=fid)
     all_data={'user':user,'food':food}
     return render(request,'cafeapp/filtered.html', all_data )
@@ -488,3 +489,87 @@ def removeFromCart(request, food_id):
     cart = Cart.objects.get(user=user, items=food)
     cart.delete()
     return redirect('/user_home')
+
+
+def checkout(request):
+    user_id = request.session.get('id')
+    user = User.objects.filter(id=user_id)
+    cart = Cart.objects.filter(user=user_id)
+    total_amount = sum(item.items.rate * item.quantity for item in cart)
+    request.session['total_amount'] = total_amount
+    return render(request, 'cafeapp/payment.html', {'cart': cart, 'total_amount': total_amount, 'user': user})
+
+def payment(request):
+    if request.method == 'POST':
+        user_id = request.session.get('id')
+        user = get_object_or_404(User, id=user_id)
+        total_amount = request.session.get('total_amount')
+        cname = request.POST.get('cname')
+        cardno = request.POST.get('cardno')
+        cvv = request.POST.get('cvv')
+        payment = Payment.objects.create(user=user, cname=cname, amount=total_amount, cardno=cardno, cvv=cvv)
+        payment.save()
+        messages.success(request, 'Payment successful!')
+        return redirect('/confirm_checkout')
+    else:
+        total_amount = request.session.get('total_amount')
+        return render(request, 'payment.html', {'total_amount': total_amount})
+
+def confirm_checkout(request):
+    try:
+        user_id = request.session.get('id')
+        user = get_object_or_404(User, id=user_id)
+        total_amount = request.session.get('total_amount')
+        cart = Cart.objects.filter(user=user)
+        
+        # Create a new Checkout instance
+        checkout = Checkout.objects.create(user=user, total_amount=total_amount)
+        for item in cart:
+            checkout.items.add(item.items)
+            # Reduce the quantity of the food item from menu model
+            food = foodmenu.objects.get(id=item.items.id)
+            food.quantity -= item.quantity
+            food.save()
+        checkout.save()
+        cart.delete()  # Delete the cart items
+        messages.success(request, 'Checkout successful!')
+    except Exception as e:
+        messages.error(request, f'Error occurred during checkout: {str(e)}')
+    return redirect('/user_home')
+
+
+from django.http import JsonResponse
+
+def increaseQuantity(request, food_id):
+    user_id = request.session.get('id')
+    user = get_object_or_404(User, id=user_id)
+    food = get_object_or_404(foodmenu, id=food_id)
+    cart = Cart.objects.get(user=user, items=food)
+    
+    # Check if increasing quantity exceeds available quantity
+    if cart.quantity + 1 > food.quantity:
+        messages.error(request, 'Exceeds available quantity!')
+        return redirect('/user_home')
+    cart.quantity += 1
+    cart.save()
+    return redirect('/user_home')
+
+
+def decreaseQuantity(request, food_id):
+    user_id = request.session.get('id')
+    user = get_object_or_404(User, id=user_id)
+    food = get_object_or_404(foodmenu, id=food_id)
+    cart = Cart.objects.get(user=user, items=food)
+    if cart.quantity > 1:
+        cart.quantity -= 1
+        cart.save()
+    else:
+        cart.delete()
+    return redirect('/user_home')
+
+
+def myBookings(request):
+    user_id = request.session.get('id')
+    user = get_object_or_404(User, id=user_id)
+    bookings = Checkout.objects.filter(user=user)
+    return render(request, 'my_bookings.html', {'bookings': bookings})

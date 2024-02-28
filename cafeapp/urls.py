@@ -29,7 +29,11 @@ urlpatterns = [
     path('changep-staff',views.changepassword_staff),
     path('addToCart/<int:food_id>/',views.addToCart),
     path('removeFromCart/<int:food_id>/',views.removeFromCart),
-    
+    path('checkout/', views.checkout, name='checkout'),
+    path('payment/', views.payment, name='payment'),
+    path('confirm_checkout/', views.confirm_checkout, name='confirm_checkout'),
+    path('increase_quantity/<int:food_id>/',views.increaseQuantity, name='increase_quantity'),
+    path('decrease_quantity/<int:food_id>/',views.decreaseQuantity, name='decrease_quantity'),
 ]
     
 

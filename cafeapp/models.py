@@ -56,15 +56,27 @@ class booking(models.Model):
 
     
 class Payment(models.Model):
-    bookid=models.ForeignKey(booking,on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,default='1')
     cname=models.CharField(max_length=25)
     amount=models.IntegerField()
     cardno=models.IntegerField()
     cvv=models.IntegerField()
+    
+    
+class Checkout(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(foodmenu)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    checkout_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Checkout by {self.user.name} on {self.checkout_date}"
+
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ForeignKey(foodmenu,on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
     def __str__(self):
         return self.items.name
 

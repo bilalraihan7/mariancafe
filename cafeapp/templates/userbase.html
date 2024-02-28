@@ -12,6 +12,9 @@
 </style>
 
 <body {% block background %}{% endblock %}>
+  {% if messages %}
+  <div class="alert alert-danger" style="font-size: 12px; padding: 2px 5px; margin-left: 5px;">{{ messages }}</div>
+  {% endif %}
   <!-- partial:partials/_navbar.html -->
   <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="navbar-brand-wrapper d-flex justify-content-center">
@@ -62,41 +65,75 @@
           <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown"
             id="notificationDropdown" href="#" data-bs-toggle="dropdown">
             <i class="mdi mdi-cart mx-0"></i>
-            <span><b>{{noofitems}}</b></span>
+            <span><b>{{ noofitems }}</b></span>
           </a>
 
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown"
-            style="width: 400px; padding: 30px;">
-            <p class="mb-0 font-weight-normal float-left dropdown-header" style="font-size: 20px;">Your Cart</p>
+            style="width: 350px; padding: 15px; overflow: auto; max-height: 500px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <p class="mb-0 dropdown-header"
+              style="font-size: 16px; color: #333; margin-bottom: 15px; font-weight: bold;">Your Cart</p>
             {% for item in cart %}
-            <a class="dropdown-item">
-              <div class="item-thumbnail">
-                <img src="{{ item.items.image.url }}" class="item-icon" alt="Food Image"
-                  style="width: 70px; height: 70px;">
-              </div>
-              <div class="item-content" style="display: flex; align-items: center; justify-content: space-between;">
+            <a class="dropdown-item"
+              style="padding: 8px; border-radius: 4px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center;">
+                <img src="{{ item.items.image.url }}" alt="Food Image"
+                  style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
                 <div>
-                  <h6 class="font-weight-normal" style="font-size: 18px;">{{ item.items.name }}</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted" style="font-size: 16px;">
-                    Price: {{ item.items.rate }}
-                  </p>
+                  <h6 style="font-size: 14px; margin-bottom: 2px;">{{ item.items.name }}</h6>
+                  <p style="font-size: 12px; margin-bottom: 0; color: #666;">Price: {{ item.items.rate }}</p>
                 </div>
-                <a href="/removeFromCart/{{item.items.id}}/">
-                  <span class="badge badge-danger badge-pill remove-badge" data-food-id="{{ item.items.id }}"
-                    style="cursor: pointer; font-size: 16px;">Remove</span>
-                </a>
               </div>
+              <div style="display: flex; align-items: center;">
+                <a href="/decrease_quantity/{{ item.items.id }}/" class="btn btn-sm"
+                  style="padding: 0 5px; margin-right: 5px; background-color: #eee;">-</a>
+                <span style="font-size: 14px;">{{ item.quantity }}</span>
+                <a href="/increase_quantity/{{ item.items.id }}/" class="btn btn-sm"
+                  style="padding: 0 5px; margin-left: 5px; background-color: #eee;">+</a>
+              </div>
+              <a href="/removeFromCart/{{ item.items.id }}/" style="margin-left: 10px;">
+                <span class="badge badge-danger"
+                  style="background-color: #dc3545; cursor: pointer; font-size: 12px;">Remove</span>
+              </a>
             </a>
             {% empty %}
-            <p class="font-weight-light small-text mb-0 text-muted" style="font-size: 16px;">Your cart is empty</p>
+            <p style="font-size: 14px; color: #666; text-align: center;">Your cart is empty</p>
             {% endfor %}
-            <a href="" class="dropdown-item" style="font-size: 18px;">Checkout</a>
+            <a href="{% url 'checkout' %}" class="dropdown-item"
+              style="font-size: 14px; text-align: center; padding: 8px; border-radius: 4px; margin-top: 15px; background-color: #0000ff7a; color: white;"
+              onclick="checkTotalAmount(event)">
+              <center> Checkout {% if total_amount %} - Total Amount: {{ total_amount }} Rs {% endif %}</center>
+            </a>
+
+            <script>
+              function checkTotalAmount(event) {
+                // Prevent the default action of the anchor tag (i.e., redirecting to the checkout page)
+                event.preventDefault();
+
+                // Get the total_amount from the server-side variable
+                var totalAmount = "{{ total_amount }}";
+
+                // Convert total_amount to a number
+                totalAmount = parseFloat(totalAmount);
+
+                // Check if total_amount is zero
+                if (totalAmount === 0) {
+                  // Display an alert
+                  alert("Please order something before proceeding to checkout.");
+                } else {
+                  // If total_amount is not zero, proceed to checkout
+                  window.location.href = event.target.href;
+                }
+              }
+            </script>
+
+
+
           </div>
 
 
+        </li>
 
-
-        </li>{% for i in user %}
+        {% for i in user %}
         <li class="nav-item nav-profile dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
             <img src="{{i.image.url}}" alt="profile" />
