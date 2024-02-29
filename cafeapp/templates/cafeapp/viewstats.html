@@ -1,0 +1,79 @@
+{% extends 'staff_base.html' %}
+{% load static %}
+
+{% block title %}
+Bookings
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2>Most Common Product Combinations</h2>
+    <canvas id="comboChart" width="400" height="200"></canvas>
+</div>
+
+<div class="container mt-4">
+    <h2>Month-wise Booking Statistics</h2>
+    <canvas id="monthwiseChart" width="400" height="200"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Product Combinations Chart
+    const comboData = {{ combo_data|safe }};
+    const comboLabels = comboData.map(data => data.combo);
+    const comboCounts = comboData.map(data => data.count);
+    var comboCtx = document.getElementById('comboChart').getContext('2d');
+    var comboChart = new Chart(comboCtx, {
+        type: 'bar',
+        data: {
+            labels: comboLabels,
+            datasets: [{
+                label: 'Combo Count',
+                data: comboCounts,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+        }
+    });
+
+    // Month-wise Bookings Chart
+    const monthwiseData = {{ monthwise_booking_data|safe }};
+    const monthLabels = monthwiseData.map(data => data.month);
+    const monthCounts = monthwiseData.map(data => data.count);
+    var monthCtx = document.getElementById('monthwiseChart').getContext('2d');
+    var monthwiseChart = new Chart(monthCtx, {
+        type: 'bar',
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: 'Bookings Count',
+                data: monthCounts,
+                backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+        }
+    });
+});
+</script>
+{% endblock %}

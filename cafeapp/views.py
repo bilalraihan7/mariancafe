@@ -532,3 +532,57 @@ def viewBookingsStaff(request):
     bookings = paginator.get_page(page_number)
 
     return render(request, 'cafeapp/viewbookings.html', {'bookings': bookings, 'user': user})
+
+from collections import Counter
+from django.db.models import Prefetch, Count
+from django.db.models.functions import TruncMonth
+from django.shortcuts import render
+from django.utils import timezone
+from datetime import timedelta
+
+# Assuming the existence of Checkout and foodmenu models
+def viewStatistics(request):
+    staff_id = request.session.get('id')
+    user = Staff.objects.filter(id=staff_id)
+
+    # Get checkouts and common combos
+    checkouts = Checkout.objects.prefetch_related(
+        Prefetch('items', queryset=foodmenu.objects.all())
+    )
+
+    combo_counter = Counter()
+
+    for checkout in checkouts:
+        items = checkout.items.all()
+        combo = tuple(sorted([item.id for item in items]))
+        if combo:
+            combo_counter[combo] += 1
+
+    most_common_combos = combo_counter.most_common(5)  # Fetch more combos
+
+    combo_data = []
+    for combo, count in most_common_combos:
+        item_names = foodmenu.objects.filter(id__in=combo).values_list('name', flat=True)
+        combo_name = ', '.join(item_names)
+        combo_data.append({'combo': combo_name, 'count': count})
+
+    # Get month-wise booking list for the last 3 months
+    three_months_ago = timezone.now() - timedelta(days=90)
+    monthwise_bookings = Checkout.objects.filter(checkout_date__gte=three_months_ago).annotate(
+        month=TruncMonth('checkout_date')
+    ).values('month').annotate(count=Count('id')).order_by('month')
+
+    # Format the monthwise bookings for display
+    monthwise_booking_data = [
+        {'month': booking['month'].strftime("%B %Y"), 'count': booking['count']}
+        for booking in monthwise_bookings
+    ]
+    print(monthwise_booking_data)
+
+    context = {
+        'user': user,
+        'combo_data': combo_data,
+        'monthwise_booking_data': monthwise_booking_data,
+    }
+
+    return render(request, 'cafeapp/viewstats.html', context)

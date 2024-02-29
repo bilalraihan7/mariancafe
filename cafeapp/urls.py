@@ -31,6 +31,7 @@ urlpatterns = [
     path('decrease_quantity/<int:food_id>/',views.decreaseQuantity, name='decrease_quantity'),
     path('edit_food/<int:foodid>/',views.update_foodDetails,name='edit_food'),
     path('viewbookings',views.viewBookingsStaff),
+    path('statastics',views.viewStatistics),
 ]
     
 
