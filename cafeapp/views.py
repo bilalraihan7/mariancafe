@@ -149,8 +149,10 @@ def logout_view(request):
 def staff_home(request):
     id=request.session['id']
     user=Staff.objects.filter(id=id)
+    bookings=Checkout.objects.all().order_by('-checkout_date')[:5]
+    noofbookings=Checkout.objects.all().count()
     foods=foodmenu.objects.all()
-    all_data={'user':user,'foods':foods}
+    all_data={'user':user,'foods':foods,'bookings':bookings,'noofbookings':noofbookings}
     return render(request,'cafeapp/staff_home.html', all_data )
 
 
@@ -208,8 +210,11 @@ def delete_food(request,id):
 def filter(request,fid):
     id=request.session['id']
     user=User.objects.filter(id=id)
+    cart=Cart.objects.filter(user=id)
+    total_amount = sum(item.items.rate * item.quantity for item in cart)
+    noofitems=cart.count()
     food=foodmenu.objects.filter(ftype=fid)
-    all_data={'user':user,'food':food}
+    all_data={'user':user,'food':food, 'cart':cart,'noofitems':noofitems,'total_amount':total_amount}
     return render(request,'cafeapp/filtered.html', all_data )
 
 
@@ -217,8 +222,11 @@ def search_food(request):
     id=request.session['id']
     user=User.objects.filter(id=id)
     name=request.GET.get('name')
+    cart=Cart.objects.filter(user=id)
+    total_amount = sum(item.items.rate * item.quantity for item in cart)
+    noofitems=cart.count()
     result=foodmenu.objects.filter(name__icontains=name)
-    all_data={'user':user,'result':result}
+    all_data={'user':user,'result':result, 'cart':cart,'noofitems':noofitems,'total_amount':total_amount}
     return render(request,'cafeapp/result.html', all_data )
 
 
@@ -229,7 +237,10 @@ def my_booking(request):
     id=request.session['id']
     bookings=booking.objects.filter(user=id)
     user=User.objects.filter(id=id)
-    all_data={'user':user,'bookings':bookings}
+    cart=Cart.objects.filter(user=id)
+    total_amount = sum(item.items.rate * item.quantity for item in cart)
+    noofitems=cart.count()
+    all_data={'user':user,'bookings':bookings, 'cart':cart,'noofitems':noofitems,'total_amount':total_amount}
     return render(request,'cafeapp/mybookings.html',all_data)
 
 
@@ -256,9 +267,12 @@ def edituser(request):
 
         up.save()
         ud = User.objects.filter(email=request.session['email'])
+        cart=Cart.objects.filter(user=id)
+        total_amount = sum(item.items.rate * item.quantity for item in cart)
+        noofitems=cart.count()
         context = {'details': ud,
                    'user': user,
-                   'msg': 'Profile Details Updated'}
+                   'msg': 'Profile Details Updated','total_amount':total_amount,'noofitems':noofitems}
 
         return render(request, 'cafeapp/editprofile-user.html', context)
     else:
@@ -266,9 +280,15 @@ def edituser(request):
         id = request.session['id']
         up = User.objects.filter(id=id)
         user = User.objects.filter(id=id)
+        cart=Cart.objects.filter(user=id)
+        total_amount = sum(item.items.rate * item.quantity for item in cart)
+        noofitems=cart.count()
         all_data = {
             'user': user,
             'details': up,
+            'total_amount':total_amount,
+            'noofitems':noofitems,
+            'cart':cart
         }
         return render(request, 'cafeapp/editprofile-user.html', all_data)
 
@@ -509,6 +529,9 @@ def myBookings(request):
     user=User.objects.filter(id=user_id)
     page_number = request.GET.get('page', 1)  # Get the page number from the request
     paginator = Paginator(bookings, 4)  # Show 5 bookings per page
+    cart=Cart.objects.filter(user=user_id)
+    total_amount = sum(item.items.rate * item.quantity for item in cart)
+    noofitems=cart.count()
 
     try:
         bookings_page = paginator.page(page_number)
@@ -518,7 +541,7 @@ def myBookings(request):
         bookings_page = paginator.page(paginator.num_pages)
 
     # Now, pass the paginated page object under the key 'bookings'
-    return render(request, 'cafeapp/mybookings.html', {'bookings': bookings_page, 'user': user})
+    return render(request, 'cafeapp/mybookings.html', {'bookings': bookings_page, 'user': user,'total_amount':total_amount,'noofitems':noofitems})
 
 
 def viewBookingsStaff(request):
