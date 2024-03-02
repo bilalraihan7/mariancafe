@@ -135,7 +135,7 @@ def services(request):
 def user_home(request):
     id=request.session['id']
     user=User.objects.filter(id=id)
-    food=foodmenu.objects.all()
+    food = foodmenu.objects.filter(removalStatus=False, quantity__gt=1)
     cart=Cart.objects.filter(user=id)
     total_amount = sum(item.items.rate * item.quantity for item in cart)
     noofitems=cart.count()
@@ -204,7 +204,14 @@ def update_foodDetails(request,foodid):
 
 def delete_food(request,id):
     a=foodmenu.objects.get(id=id)
-    a.delete()
+    a.removalStatus=True
+    a.save()
+    return redirect('/staff_home')
+
+def addToStock(request,id):
+    a=foodmenu.objects.get(id=id)
+    a.removalStatus=False
+    a.save()
     return redirect('/staff_home')
 
 def filter(request,fid):
@@ -609,3 +616,11 @@ def viewStatistics(request):
     }
 
     return render(request, 'cafeapp/viewstats.html', context)
+
+
+def updateQuantity(request, food_id):
+    food = get_object_or_404(foodmenu, id=food_id)
+    quantity = request.POST.get('quantity')
+    food.quantity = quantity
+    food.save()
+    return redirect('/staff_home')

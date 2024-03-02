@@ -60,6 +60,7 @@
             <div class="col-md-3 d-flex align-items-stretch"> <!-- Adjusted for flex behavior -->
                 <div class="card h-100"> <!-- h-100 class to make cards of equal height -->
                     <div class="card-body">
+                        <h5 class="card-title">Order ID: CAFEMCKA100{{ booking.id }}</h5> <!-- Add this line to display the order ID -->
                         <h5 class="card-title">Order Items</h5>
                         <div class="list-group">
                             {% for food_item in booking.items.all %}
@@ -74,6 +75,7 @@
                         <p class="card-text mt-3">Checkout Date: {{ booking.checkout_date }}</p>
                         <p class="card-text">Total Amount: ${{ booking.total_amount }}</p>
                     </div>
+                    
                 </div>
             </div>
             {% endfor %}

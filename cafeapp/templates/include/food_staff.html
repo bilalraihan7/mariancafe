@@ -1,84 +1,134 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Marian Cafe</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+<head>
+  <title>Marian Cafe</title>
+  <meta charset="utf-8">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="{% static 'vehiapp/css/open-iconic-bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vehiapp/css/animate.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
+    rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'vehiapp/css/owl.carousel.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vehiapp/css/owl.theme.default.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vehiapp/css/magnific-popup.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/open-iconic-bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/animate.css' %}">
 
-    <link rel="stylesheet" href="{% static 'vehiapp/css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/owl.theme.default.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/magnific-popup.css' %}">
 
-    <link rel="stylesheet" href="{% static 'vehiapp/css/ionicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/aos.css' %}">
 
-    <link rel="stylesheet" href="{% static 'vehiapp/css/bootstrap-datepicker.css' %}">
-    <link rel="stylesheet" href="{% static 'vehiapp/css/jquery.timepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/ionicons.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'vehiapp/css/bootstrap-datepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/jquery.timepicker.css' %}">
 
 
-    <link rel="stylesheet" href="{% static 'vehiapp/css/flaticon.css' %}">
-    <link rel="stylesheet" href="{% static 'vehiapp/css/icomoon.css' %}">
-    <link rel="stylesheet" href="{% static 'vehiapp/css/style.css' %}">
-  </head>
-  <style>
-    .btn.btn-third {
-  background: #b52424 !important;
-  border: 1px solid #c01212 !important;
-  color: #fff !important;
-}
-  </style>
-  <body>
+  <link rel="stylesheet" href="{% static 'vehiapp/css/flaticon.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/icomoon.css' %}">
+  <link rel="stylesheet" href="{% static 'vehiapp/css/style.css' %}">
+</head>
+<style>
+  .btn.btn-third {
+    background: #b52424 !important;
+    border: 1px solid #c01212 !important;
+    color: #fff !important;
+  }
+</style>
+
+<body>
   <div class="me-md-3 me-xl-5">
-                    <h2>Welcome back, {% for i in user %}<p>{{i.email}}<p>{% endfor %}</h2>
-                  </div>
-    <!-- END nav -->
-
-
-    	<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-12 heading-section text-center ftco-animate mb-5">
-      <h2 class="mb-2">Food Menu</h2>
-    </div>
+    <h2>Welcome back, {% for i in user %}<p>{{i.email}}
+      <p>{% endfor %}
+    </h2>
   </div>
-  <div class="row">
- {% for food in foods %}
-    <div class="col-lg-4 col-md-6 col-sm-12">
+  <!-- END nav -->
+
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+        <h2 class="mb-2">Food Menu</h2>
+      </div>
+    </div>
+    <div class="row">
+      {% for food in foods %}
+      <div class="col-lg-4 col-md-6 col-sm-12">
         <div class="car-wrap rounded ftco-animate">
-            <div class="img rounded d-flex align-items-end" style="background-image: url('{{ food.image.url }}');">
+          <div class="img rounded d-flex align-items-end" style="background-image: url('{{ food.image.url }}');">
+          </div>
+          <div class="text">
+            <h2 class="mb-0"><a href="#">{{ food.name }}</a></h2>
+            <div class="d-flex mb-3">
+              {% if food.quantity > 10 %}
+              <h7 style="color: #0d0072;">{{ food.quantity }} items left</h7>
+              {% else %}
+              <h7 style="color: #ff0000;">{{ food.quantity }} items left</h7>
+              {% endif %}
+              <p class="price ml-auto">₹{{ food.rate }} </p>
             </div>
-            <div class="text">
-                <h2 class="mb-0"><a href="#">{{ food.name }}</a></h2>
-                <div class="d-flex mb-3">
-                    <p class="price ml-auto">₹{{ food.rate }} </p>
-                </div>
-                <p class="d-flex mb-0 d-block">
-                    <!-- <a href="#" class="btn btn-primary py-2 mr-1">Bookings</a> -->
-                    <a href="/edit_food/{{food.id}}/" class="btn btn-secondary py-2 ml-1">Edit</a>
-                    <a href="/delete_food/{{food.id}}/"  class="btn btn-third py-2 ml-1" onclick="return confirm('Are you sure to Delete ?')">Delete</a>
-                </p>
-            </div>
+            <p class="d-flex mb-0 d-block">
+              <a href="/edit_food/{{food.id}}/" class="btn btn-secondary py-2 ml-1">Edit</a>
+              <a href="javascript:void(0)" onclick="updateQuantity({{food.id}})" class="btn btn-info py-2 ml-1">Update
+                Quantity</a>
+              {% if food.removalStatus == True %}
+              <a href="/add_stock/{{food.id}}/" class="btn btn-primary py-2 ml-1"
+                onclick="return confirm('Are you sure ?')">Add<br> To <br>Menu</a>
+              {% else %}
+              <a href="/delete_food/{{food.id}}/" class="btn btn-third py-2 ml-1"
+                onclick="return confirm('Are you sure ?')">Remove From Menu</a>
+              {% endif %}
+            </p>
+          </div>
         </div>
+      </div>
+      {% endfor %}
+
     </div>
-{% endfor %}
-
   </div>
-</div>
 
 
 
 
 
+  <script>
+    function updateQuantity(foodId) {
+      let quantity = prompt("Please enter the new quantity:", "1");
+      if (quantity !== null && quantity > 0) {
+        let csrftoken = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+          url: "/update_quantity/"+foodId+"/",
+          type: "POST",
+          data: {
+            id: foodId,
+            quantity: quantity,
+            csrfmiddlewaretoken: csrftoken
+          },
+          success: function (response) {
+            // Handle success (you might want to refresh the part of the page showing the quantity)
+            alert("Quantity updated successfully!");
+            location.reload(); // Simple way to refresh the page, or you could update just the part of the page that needs it
+          },
+          error: function (xhr, status, error) {
+            // Handle error
+            alert("An error occurred. Please try again.");
+          }
+        });
+      } else {
+        alert("Invalid quantity. Please enter a number greater than 0.");
+      }
+    }
+  </script>
 
 
   <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+        stroke="#F96D00" />
+    </svg></div>
 
 
   <script src="{% static 'vehiapp/js/jquery.min.js' %}"></script>
@@ -95,9 +145,11 @@
   <script src="{% static 'vehiapp/js/bootstrap-datepicker.js' %}"></script>
   <script src="{% static 'vehiapp/js/jquery.timepicker.min.js' %}"></script>
   <script src="{% static 'vehiapp/js/scrollax.min.js' %}"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="{% static 'vehiapp/js/google-map.js' %}"></script>
   <script src="{% static 'vehiapp/js/main.js' %}"></script>
 
-  </body>
+</body>
+
 </html>

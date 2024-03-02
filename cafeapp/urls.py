@@ -15,6 +15,7 @@ urlpatterns = [
     path('staff_home',views.staff_home),
     path('add_menu',views.add_food),
     path('delete_food/<int:id>/',views.delete_food),
+    path('add_stock/<int:id>/',views.addToStock),
     path('filter/<int:fid>/',views.filter),
     path('search_food',views.search_food,name='search_food'),
     path('mybookings',views.myBookings),
@@ -32,6 +33,7 @@ urlpatterns = [
     path('edit_food/<int:foodid>/',views.update_foodDetails,name='edit_food'),
     path('viewbookings',views.viewBookingsStaff),
     path('statastics',views.viewStatistics),
+    path('update_quantity/<int:food_id>/',views.updateQuantity, name='update_quantity'),
 ]
     
 
