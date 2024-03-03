@@ -9,7 +9,7 @@
 
   <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
     rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="{% static 'vehiapp/css/open-iconic-bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'vehiapp/css/animate.css' %}">
 
@@ -105,9 +105,8 @@
                       </div>
                       <div class="form-group ml-2">
                         <label for="password" class="label">Password</label>
-                        <input type="password" class="form-control" name="password" placeholder="Enter Password"
-                          required>
-                      </div>
+                        <input type="password" class="form-control" pattern="[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}" name="password" placeholder="Enter Password" title="Password must be 8 to 12 characters long and contain only letters (both lowercase and uppercase), digits, and certain special characters like !, @, #, $, %, ^, &, *, _, =, +, and -." required>
+                    </div>
                     </div>
 
                     <div class="d-flex">
@@ -145,7 +144,7 @@
                       <div class="col-md-4 d-flex align-self-stretch ftco-animate">
                         <div class="services w-100 text-center">
                           <div class="icon d-flex align-items-center justify-content-center">
-                            <span class="flaticon-food-plate"></span></div>
+                            <i class="fas fa-utensils"></i></div>
                           <div class="text w-100">
                             <h3 class="heading mb-2">Choose Your Taste </h3>
                           </div>
@@ -162,7 +161,7 @@
                       </div>
 
                     </div>
-                    <p><a href=/vehicles class="btn btn-primary py-3 px-4">Pick Your Taste</a></p>
+                    <p><a href=/foodmenu class="btn btn-primary py-3 px-4">Pick Your Taste</a></p>
                   </div>
                 </div>
               </div>
@@ -190,7 +189,7 @@
                 <div class="text">
                   <h2 class="mb-0"><a href="#">{{ food.name }}</a></h2>
                   <div class="d-flex mb-3">
-                    <!-- <span class="cat">{{ vehicle.vehicle_reg }}</span> -->
+                    
                     <p class="price ml-auto">₹{{ food.rate }} </p>
                   </div>
                   <p class="d-flex mb-0 d-block">
@@ -220,7 +219,7 @@
                 <p>Welcome to Cafe Marian, where every sip is a journey and every flavor tells a story. Discover a delightful experience as we serve you the perfect blend of passion and taste. With a cozy ambiance and warm hospitality, Cafe Marian invites you to savor not just coffee but moments of connection and relaxation. From artisanal brews to delectable pastries, our menu is crafted with love, ensuring each visit is a treat for your senses. At Cafe Marian, we believe in creating more than just a cafe; we create a haven for those who appreciate the art of good coffee and the joy of shared moments.
                 </p>
                 <p></p>
-                <p><a href="/vehicles" class="btn btn-primary py-3 px-4">Find Your Taste</a></p>
+                <p><a href="/foodmenu" class="btn btn-primary py-3 px-4">Find Your Taste</a></p>
               </div>
             </div>
           </div>
