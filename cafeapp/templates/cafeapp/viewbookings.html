@@ -17,6 +17,7 @@ Bookings
                 <th>Booked Items</th>
                 <th>Item Photos</th>
                 <th>Checkout Time</th>
+                <th>Delivery Status</th>
                 <th>Total Amount</th>
             </tr>
         </thead>
@@ -37,6 +38,15 @@ Bookings
                     {% endfor %}
                 </td>
                 <td>{{ booking.checkout_date|date:"D, d M Y H:i" }}</td>
+                <td>
+                    {% if booking.isDelivered == 'Delivered' %}
+                        <center><span class="badge badge-success">{{ booking.isDelivered }} at<br> {{ booking.delivery_date|date:"D, d M Y H:i" }}</span></center>
+                    {% else %}
+                        <a href="/deliver/{{booking.id}}/"><button class="btn btn-primary">Mark as Delivered</button></a>
+                    {% endif %}
+                </td>
+                
+                
                 <td>{{ booking.total_amount }}</td>
             </tr>
             {% endfor %}

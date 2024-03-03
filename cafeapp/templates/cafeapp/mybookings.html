@@ -14,20 +14,17 @@
     <style>
         .card {
             margin-bottom: 20px;
+            text-align: center; /* Center align the content inside the card */
         }
-        .booking-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .booking-item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 15px;
+        .logo {
+            width: 100px; /* Adjust the width of the logo as needed */
+            height: 100px; /* Adjust the height of the logo as needed */
+            border-radius: 50%; /* Make the logo circular */
+            margin: 0 auto 15px auto; /* Center the logo vertically and horizontally */
         }
         .booking-info {
             flex-grow: 1;
+            text-align: left; /* Align the booking information text to the left */
         }
         .list-group-item {
             display: flex;
@@ -57,10 +54,14 @@
     <div class="container">
         <div class="row">
             {% for booking in bookings %}
-            <div class="col-md-3 d-flex align-items-stretch"> <!-- Adjusted for flex behavior -->
-                <div class="card h-100"> <!-- h-100 class to make cards of equal height -->
+            <div class="col-md-3 d-flex align-items-stretch">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Order ID: CAFEMCKA100{{ booking.id }}</h5> <!-- Add this line to display the order ID -->
+                        <img src="{{booking.user.image.url}}" alt="Logo" class="logo"> <!-- Display the user image as a logo -->
+                        <h5 class="card-title">Order ID: CAFEMCKA100{{ booking.id }}
+                        <span class="badge {% if booking.isDelivered == 'Delivered' %}badge-success{% else %}badge-danger{% endif %}">
+                            {{ booking.isDelivered }}{% if booking.isDelivered == 'Delivered' %} at {{ booking.delivery_date|date:"D, d M Y H:i" }}{% endif %}
+                        </span>               </h5>         
                         <h5 class="card-title">Order Items</h5>
                         <div class="list-group">
                             {% for food_item in booking.items.all %}
@@ -75,6 +76,7 @@
                         <p class="card-text mt-3">Checkout Date: {{ booking.checkout_date }}</p>
                         <p class="card-text">Total Amount: ${{ booking.total_amount }}</p>
                     </div>
+                    
                     
                 </div>
             </div>
@@ -123,4 +125,5 @@
     </div>
 </body>
 </html>
+
 {% endblock %}

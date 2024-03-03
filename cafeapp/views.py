@@ -624,3 +624,10 @@ def updateQuantity(request, food_id):
     food.quantity = quantity
     food.save()
     return redirect('/staff_home')
+
+def deliverProduct(request, booking_id):
+    booking = get_object_or_404(Checkout, id=booking_id)
+    booking.isDelivered = "Delivered"
+    booking.delivery_date=timezone.now()
+    booking.save()
+    return redirect('/viewbookings')

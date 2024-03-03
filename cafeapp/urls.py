@@ -34,6 +34,7 @@ urlpatterns = [
     path('viewbookings',views.viewBookingsStaff),
     path('statastics',views.viewStatistics),
     path('update_quantity/<int:food_id>/',views.updateQuantity, name='update_quantity'),
+    path('deliver/<int:booking_id>/',views.deliverProduct)
 ]
     
 

@@ -69,6 +69,8 @@ class Checkout(models.Model):
     items = models.ManyToManyField(foodmenu)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     checkout_date = models.DateTimeField(auto_now_add=True)
+    isDelivered = models.CharField(max_length=20,default="Not Delivered")
+    delivery_date = models.DateTimeField(blank=True,null=True)
 
     def __str__(self):
         return f"Checkout by {self.user.name} on {self.checkout_date}"
