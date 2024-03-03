@@ -29,7 +29,7 @@ class StaffAdmin(admin.ModelAdmin):
             provider.is_verified = True
             provider.save()
 
-    verify_license.short_description = "Verify selected providers' licenses"
+    verify_license.short_description = "Verify selected staff"
 
     actions = [verify_license]
 
@@ -51,7 +51,7 @@ class UserAdmin(admin.ModelAdmin):
             provider.is_verified = True
             provider.save()
 
-    verify_license.short_description = "Verify selected providers' licenses"
+    verify_license.short_description = "Verify selected student"
 
     actions = [verify_license]
 
